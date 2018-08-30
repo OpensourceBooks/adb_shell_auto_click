@@ -42,7 +42,7 @@ for node in nodes:
         y_width = (int(bounds_arr.split(",")[3])-int(bounds_arr.split(",")[1]))/2
 
         x_touch = int(x+x_width)
-        y_touch = int(y+y_width)+20 #这个20是大致偏差，可能是固定浮动栏的原因。
+        y_touch = int(y+y_width)+48 #这个48是大致偏差，是顶部固定浮动栏的原因。
 
         screen = {
             "name":username,
@@ -58,10 +58,10 @@ print ("开始执行操作。。。")
 
 for tap in tasks:
     # print (tap)
-
     print ("任务名称：{0}\n屏幕坐标: x={1} y={2}".format(tap["name"],tap["x"],tap["y"]))
     print ("正在点击 x={0} y={1}".format(tap["x"],tap["y"]))
     popen("adb shell input tap {0} {1}".format(tap["x"],tap["y"]))
-    sleep(5)
+    sleep(3)
     print ("返回")
     popen("adb shell input keyevent {0}".format(4))
+    sleep(3)

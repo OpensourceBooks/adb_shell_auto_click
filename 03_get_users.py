@@ -19,14 +19,13 @@ popen("adb pull /sdcard/{0}.xml temp_ui".format(filename))
 sleep(5)
 
 d = pq(filename="temp_ui/{0}.xml".format(filename))
-nodes = d("node")
+nodes = d('node[resource-id="com.bullet.messenger:id/number_name"]')
 
 tasks = []
 
 print ("开始获得x、y。。。")
 for node in nodes:
-    # 找到包含人员的
-    if node.attrib['resource-id']=="com.bullet.messenger:id/number_name":
+
         username = node.attrib['text']
         bounds = node.attrib['bounds']
 
@@ -61,7 +60,39 @@ for tap in tasks:
     print ("任务名称：{0}\n屏幕坐标: x={1} y={2}".format(tap["name"],tap["x"],tap["y"]))
     print ("正在点击 x={0} y={1}".format(tap["x"],tap["y"]))
     popen("adb shell input tap {0} {1}".format(tap["x"],tap["y"]))
+    sleep(5)
+    print("人物页面完成")
+
+    # 是否是好友
+    filename = str(int(time()))
+    popen("adb shell uiautomator dump /sdcard/profile_{0}.xml".format(filename))
+
+    print ("正在保存屏幕控件profile_xml文件。。。")
+    #延时2秒钟，确保xml已经保存
     sleep(3)
+    print ("正在复制profile_xml到PC端项目文件夹temp_ui中。。。")
+    #把xml文件保存在项目的temp_ui目录
+    popen("adb pull /sdcard/profile_{0}.xml temp_ui".format(filename))
+    sleep(5)
+    print("正在检查是否是好友")
+    d_profile = pq(filename="temp_ui/profile_{0}.xml".format(filename))
+
+    #得到的是数组，即便是1个。
+    query = d_profile('node[text="添加到联系人"]')
+
+    #如果是陌生人
+    if query:
+
+
+        #点击添加到联系人
+        print("不是好友，准备添加到联系人")
+        popen("adb shell input tap {0} {1}".format(360,650))#这个数字是测试时测试出来的，不同的手机分辨率不一样。
+        #发送申请
+        print ("确认申请")
+        sleep(2)
+        popen("adb shell input tap {0} {1}".format(600,550))#这个数字是测试时测试出来的，不同的手机分辨率不一样。
+        sleep(3)
+
     print ("返回")
     popen("adb shell input keyevent {0}".format(4))
-    sleep(3)
+    sleep(5)

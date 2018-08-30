@@ -21,38 +21,42 @@ popen("adb pull /sdcard/{0}.png temp_ui".format(filename))
 
 sleep(5)
 
-d = pq(filename="temp_ui/{0}.xml".format(filename))
-nodes = d('node[resource-id="com.bullet.messenger:id/number_name"]')
+tasks=[]
+#载入并显示图片
+img=cv2.imread("temp_ui/{0}.png".format(filename))
+cv2.imshow('img',img)
+#灰度化
+gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+#输出图像大小，方便根据图像大小调节minRadius和maxRadius
+print(img.shape)
+#霍夫变换圆检测
+circles= cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT,1,100,param1=100,param2=30,minRadius=5,maxRadius=300)
+#输出返回值，方便查看类型
+print(circles)
+#输出检测到圆的个数
+print(len(circles[0]))
 
-tasks = []
+print('-------------我是条分割线-----------------')
+#根据检测到圆的信息，画出每一个圆
+for circle in circles[0]:
+    #圆的基本信息
+    print(circle[2])
+    #坐标行列
+    x=int(circle[0])
+    y=int(circle[1])
+    #半径
+    r=int(circle[2])
+    #在原图用指定颜色标记出圆的位置
+    #img=cv2.circle(img,(x,y),r,(0,0,255),-1)
 
-print ("开始获得x、y。。。")
-for node in nodes:
-
-        username = node.attrib['text']
-        bounds = node.attrib['bounds']
 
 
-        #[457,257][529,290]
 
-        bounds_arr = bounds.replace("][",",").replace("[","").replace("]","")
-
-        x = int(bounds_arr.split(",")[0])
-        y = int(bounds_arr.split(",")[2])
-
-        x_width = (int(bounds_arr.split(",")[2])-int(bounds_arr.split(",")[0]))/2
-        y_width = (int(bounds_arr.split(",")[3])-int(bounds_arr.split(",")[1]))/2
-
-        x_touch = int(x+x_width)
-        y_touch = int(y+y_width)+48 #这个48是大致偏差，是顶部固定浮动栏的原因。
-
-        screen = {
-            "name":username,
-            "x":x_touch,
-            "y":y_touch
-        }
-
-        tasks.append(screen)
+    screen = {
+        "x":x,
+        "y":y
+    }
+    tasks.append(screen)
 
 #print (nodes)
 
@@ -60,7 +64,6 @@ print ("开始执行操作。。。")
 
 for tap in tasks:
     # print (tap)
-    print ("任务名称：{0}\n屏幕坐标: x={1} y={2}".format(tap["name"],tap["x"],tap["y"]))
     print ("正在点击 x={0} y={1}".format(tap["x"],tap["y"]))
     popen("adb shell input tap {0} {1}".format(tap["x"],tap["y"]))
     sleep(5)

@@ -1,4 +1,4 @@
-# adb_shell_autoclick
+# adb_shell_auto_click
 
 如何使用adb shell来操控android
 

@@ -30,11 +30,11 @@ gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 #输出图像大小，方便根据图像大小调节minRadius和maxRadius
 print(img.shape)
 #霍夫变换圆检测
-circles= cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT,1,100,param1=100,param2=30,minRadius=5,maxRadius=300)
+circles= cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT,1,100,param1=120,param2=50,minRadius=20,maxRadius=100)
 #输出返回值，方便查看类型
 print(circles)
 #输出检测到圆的个数
-print(len(circles[0]))
+print("检测出{0}个用户".format(len(circles[0])))
 
 print('-------------我是条分割线-----------------')
 #根据检测到圆的信息，画出每一个圆

@@ -2,11 +2,7 @@ from pyquery import PyQuery as pq
 from os import popen
 from time import sleep
 
-# f = open("temp_ui/1535618324.xml","r")
-# centent = f.readlines()
-# f.close()
-# d = pq(centent)
-d = pq(filename="temp_ui/1535618324.xml")
+d = pq(filename="temp_ui/你得到的文件.xml")
 nodes = d("node")
 
 screen_taps = []

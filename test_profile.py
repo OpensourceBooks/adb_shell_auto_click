@@ -2,11 +2,7 @@ from pyquery import PyQuery as pq
 from os import popen
 from time import sleep
 
-# f = open("temp_ui/1535618324.xml","r")
-# centent = f.readlines()
-# f.close()
-# d = pq(centent)
-d = pq(filename="temp_ui/profile_1535630001.xml")
+d = pq(filename="temp_ui/这里是你自己得到的用户界面文件.xml")
 
 #得到的是数组，即便是1个。
 query = d('node[text="添加到联系人"]')

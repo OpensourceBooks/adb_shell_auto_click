@@ -41,3 +41,11 @@ python 01_unlock.py
 ```
 python 02_unlock_auto_height.py
 ```
+
+
+3.获得用户
+4.从群里添加好友
+
+```
+python 04_add_users_from_group.py
+```
